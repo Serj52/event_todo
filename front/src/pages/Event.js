@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import "./style.css"; 
 
 function Event() {
     const variantResponse = [
@@ -33,52 +33,50 @@ function Event() {
             component="form"
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '25ch' },
-
-
             }}
             noValidate
             autoComplete="off"
         >
-            <div style={{"display": 
-            "flex",  "flex-direction": "column"}}>
-                <TextField
-                    id="outlined-search"
-                    label="Название мероприятия"
-                    type="search"
+            <div className='textField'>
+            <TextField
+                id="outlined-search"
+                label="Название мероприятия"
+                type="search"
+                style={{margin:25}}
+            />
 
-                />
+            <TextField
+                id="outlined-select-currency"
+                select
+                label="Выберите"
+                defaultValue={value}
+                helperText="Ограничение числа участников"
+                onChange={handleChange}
+                style={{margin:25}}
 
-                <TextField
-                    id="outlined-select-currency"
-                    select
-                    label="Выберите"
-                    defaultValue={value}
-                    helperText="Ограничение числа участников"
-                    onChange={handleChange}
+            >
+                {variantResponse.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
+                ))}
 
-                >
-                    {variantResponse.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                        </MenuItem>
-                    ))}
+            </TextField>
 
-                </TextField>
-
-                <TextField
-                    id="outlined-number"
-                    label="Number"
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    style={{ display: value != 'Нет' ? "block" : "none" }}
-                />
-
+            <TextField
+                id="outlined-number"
+                label="Число участников"
+                type="number"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                style={{ margin:25, display: value != 'Нет' ? "block" : "none" }}
+            />
 
 
-            </div>
-        </Box>
+
+        </div>
+        </Box >
 
 
     );
