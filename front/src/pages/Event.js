@@ -20,12 +20,12 @@ function Event() {
         }
     ]
 
-    const [choose, setChoose] = React.useState();
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState('Нет');
 
     const handleChange = (e) => {
-        console.log(e.target)
-      }
+        console.log(e.target.value)
+        setValue(e.target.value)
+    }
 
 
     return (
@@ -33,32 +33,34 @@ function Event() {
             component="form"
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '25ch' },
+
+
             }}
             noValidate
             autoComplete="off"
         >
-            <div>
+            <div style={{"display": 
+            "flex",  "flex-direction": "column"}}>
                 <TextField
                     id="outlined-search"
                     label="Название мероприятия"
-                    type="search" 
-                    
-                    />
+                    type="search"
 
-                <TextField 
+                />
+
+                <TextField
                     id="outlined-select-currency"
                     select
                     label="Выберите"
-                    defaultValue="Нет"
+                    defaultValue={value}
                     helperText="Ограничение числа участников"
                     onChange={handleChange}
-                    
+
                 >
                     {variantResponse.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
                         </MenuItem>
-                        
                     ))}
 
                 </TextField>
@@ -70,7 +72,7 @@ function Event() {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    // style={{ display: showInfo ? "block" : "none" }}
+                    style={{ display: value != 'Нет' ? "block" : "none" }}
                 />
 
 
