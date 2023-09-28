@@ -7,6 +7,8 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import dayjs from 'dayjs';
 
 import "./style.css";
@@ -27,12 +29,11 @@ function Event() {
 
 
     const handleChangeLimit = (e) => {
-        console.log(e.target.value)
         setLimit(e.target.value)
     }
 
-    const [dateEvent, setDateEvent] = React.useState(dayjs());
-    const [dateRecord, setDateRecord] = React.useState(dayjs());
+    const [dateEvent, setDateEvent] = React.useState();
+    const [dateRecord, setDateRecord] = React.useState();
     const [dateEventExist, setDateEventExist] = React.useState("Нет");
 
     const handleChangeDate = (e) => {
@@ -47,7 +48,7 @@ function Event() {
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                '& .MuiTextField-root': { m: 1, width: '50ch' },
             }}
             noValidate
             autoComplete="off">
@@ -84,6 +85,7 @@ function Event() {
                     }}
                     style={{ margin: 25, display: limit != 'Нет' ? "block" : "none" }}
                 />
+
                 <TextField
                     id="outlined-select-currency"
                     select
@@ -100,23 +102,27 @@ function Event() {
                     ))}
                 </TextField>
 
-                <LocalizationProvider dateAdapter={AdapterDayjs} style={{ margin: 25, display: dateEventExist != 'Нет' ? "block" : "none" }}>
-                    <DemoContainer components={['DateCalendar', 'DateCalendar']}>
-                        <DemoItem label="Выберите дату мероприятия">
-                        <DateCalendar value={dateEvent} onChange={(newValue) => setDateEvent(newValue)} />
-                        </DemoItem>
-                    </DemoContainer>
-                </LocalizationProvider >
-                
+                <div style={{ margin: 25, display: dateEventExist != 'Нет' ? "block" : "none"}}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                        <DemoContainer components={['DatePicker', 'DatePicker']}>
+                            <DatePicker
+                            label="Выберите дату мероприятия"
+                            value={dateEvent}
+                            onChange={(newValue) => setDateEvent(newValue)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider> 
+                </div>
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateCalendar', 'DateCalendar']}>
-                        <DemoItem label="Выберите срок записи">
-                        <DateCalendar value={dateRecord} onChange={(newValue) => setDateRecord(newValue)} />
-                        </DemoItem>
+                    <DemoContainer components={['DatePicker', 'DatePicker']}>
+                        <DatePicker
+                        label="Выберите срок записи"
+                        value={dateRecord}
+                        onChange={(newValue) => setDateRecord(newValue)}
+                        />
                     </DemoContainer>
-                </LocalizationProvider>
-
+                </LocalizationProvider>       
             </div>
         </Box >
 
