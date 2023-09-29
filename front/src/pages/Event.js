@@ -35,13 +35,13 @@ function Event() {
     const [dateEvent, setDateEvent] = React.useState();
     const [dateRecord, setDateRecord] = React.useState();
     const [dateEventExist, setDateEventExist] = React.useState("Нет");
+    const [participant, setParticipant] = React.useState(null);
 
     const handleChangeDate = (e) => {
         console.log(e.target.value)
         setDateEventExist(e.target.value)
     }
-    
-    
+
 
 
     return (
@@ -80,6 +80,15 @@ function Event() {
                     id="outlined-number"
                     label="Число участников"
                     type="number"
+                    error={participant <= 0 ? true : false}
+                    helperText={participant <= 0 ? "Число должно быть больше нуля" : ""}
+                    onChange={(e) => {
+                        var participant = parseInt(e.target.value, 10);
+                        if (participant >= 0){
+                            setParticipant(participant);
+                        }
+                        console.log(participant);
+                    }}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -93,6 +102,7 @@ function Event() {
                     defaultValue={dateEventExist}
                     helperText="Дата мероприятия"
                     onChange={handleChangeDate}
+
                     style={{ margin: 25 }}
                 >
                     {variantResponse.map((option) => (
@@ -102,27 +112,27 @@ function Event() {
                     ))}
                 </TextField>
 
-                <div style={{ margin: 25, display: dateEventExist != 'Нет' ? "block" : "none"}}>
+                <div style={{ margin: 25, display: dateEventExist != 'Нет' ? "block" : "none" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                         <DemoContainer components={['DatePicker', 'DatePicker']}>
                             <DatePicker
-                            label="Выберите дату мероприятия"
-                            value={dateEvent}
-                            onChange={(newValue) => setDateEvent(newValue)}
+                                label="Выберите дату мероприятия"
+                                value={dateEvent}
+                                onChange={(newValue) => setDateEvent(newValue)}
                             />
                         </DemoContainer>
-                    </LocalizationProvider> 
+                    </LocalizationProvider>
                 </div>
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker', 'DatePicker']}>
                         <DatePicker
-                        label="Выберите срок записи"
-                        value={dateRecord}
-                        onChange={(newValue) => setDateRecord(newValue)}
+                            label="Выберите срок записи"
+                            value={dateRecord}
+                            onChange={(newValue) => setDateRecord(newValue)}
                         />
                     </DemoContainer>
-                </LocalizationProvider>       
+                </LocalizationProvider>
             </div>
         </Box >
 
