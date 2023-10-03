@@ -13,10 +13,9 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import "./style.css";
 
+
 function Event() {
-    // dayjs.extend(utc);
-    // dayjs.extend(timezone);
-    // dayjs.tz.setDefault('Europe/Moscow');
+
     const variantResponse = [
         {
             value: 'Да',
@@ -29,8 +28,6 @@ function Event() {
     ]
 
     const [limit, setLimit] = React.useState('Нет');
-
-
     const handleChangeLimit = (e) => {
         setLimit(e.target.value)
     }
@@ -38,13 +35,33 @@ function Event() {
     const [dateEvent, setDateEvent] = React.useState(null);
     const [dateRecord, setDateRecord] = React.useState(null);
     const [dateEventExist, setDateEventExist] = React.useState("Нет");
-    const [participant, setParticipant] = React.useState(null);
+    const [participant, setParticipant] = React.useState();
 
     const handleChangeDate = (e) => {
         console.log(e.target.value)
         setDateEventExist(e.target.value)
     }
 
+    const [error, setError] = React.useState(null);
+    const startOfQ12022 = dayjs();
+    // const endOfQ12022 = dayjs();
+
+    const errorMessage = React.useMemo(() => {
+        switch (error) {
+            case 'maxDate':
+            case 'minDate': {
+                return 'Пожалуйста выберите дату не позднее текущей';
+            }
+
+            case 'invalidDate': {
+                return 'Неверный формат даты';
+            }
+
+            default: {
+                return '';
+            }
+        }
+    }, [error]);
 
 
     return (
@@ -83,6 +100,7 @@ function Event() {
                     id="outlined-number"
                     label="Число участников"
                     type="number"
+                    defaultValue={1}
                     error={participant <= 0 ? true : false}
                     helperText={participant <= 0 ? "Число должно быть больше нуля" : ""}
                     onChange={(e) => {
@@ -105,7 +123,6 @@ function Event() {
                     defaultValue={dateEventExist}
                     helperText="Дата мероприятия"
                     onChange={handleChangeDate}
-
                     style={{ margin: 25 }}
                 >
                     {variantResponse.map((option) => (
@@ -118,22 +135,46 @@ function Event() {
                 <div style={{ margin: 25, display: dateEventExist != 'Нет' ? "block" : "none" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker 
-                            label="Выберите дату мероприятия" 
-                            format="DD-MM-YYYY" 
-                            value={dateEvent} 
-                            onChange={(newValue) => setDateEvent(newValue)} />
+                            <DatePicker
+                                label="Выберите дату мероприятия"
+                                format="DD-MM-YYYY"
+                                value={dateEvent}
+                                onChange={(newValue) => setDateEvent(newValue)}
+                                onError={(newError) => setError(newError)}
+                                slotProps={{
+                                    textField: {
+                                        helperText: errorMessage,
+                                    },
+                            }}
+                            minDate={startOfQ12022} 
+                                
+                                />
                         </DemoContainer>
                     </LocalizationProvider>
                 </div>
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker']}>
-                        <DatePicker 
-                        label="Выберите срок записи" 
-                        format="DD-MM-YYYY" 
-                        value={dateRecord} 
-                        onChange={(newValue) => setDateRecord(newValue)} />
+                        <DatePicker
+                            label="Выберите срок записи"
+                            format="DD-MM-YYYY"
+                            value={dateRecord}
+                            onError={(newError) => setError(newError)}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessage,
+                                },
+                            }}
+                            minDate={startOfQ12022}
+                            onChange={
+                                (newValue) => {
+                                    setDateRecord(newValue);
+                                    // let now = dayjs()
+                                    // console.log(`Время сейчас ${now}`)
+                                    // console.log(`Новое значение ${newValue}`)
+                                    // console.log(`Разница ${now.diff(newValue, "day")}`)
+                                }
+                            } />
                     </DemoContainer>
                 </LocalizationProvider>
             </div>
